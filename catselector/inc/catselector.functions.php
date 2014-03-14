@@ -66,14 +66,17 @@ function catselector_changeselect(obj)
 		$result .= '<option value="">---</option>';
 		foreach ($structure[$area] as $i => $x)
 		{		
-			$mtch = $structure[$area][$i]['path'].'.';
-			$mtchlen = mb_strlen($mtch);
-			$mtchlvl = mb_substr_count($mtch,".");
-
-			if(($mtchlvl == 1 && $lvl == 1) || ($lvl > 1 && $mtchlvl == $lvl && in_array($i, $subcats)))
+			if(cot_auth($area, $i, 'W'))
 			{
-				$selected_cat = ($parents[$lvl-1] == $i) ? 'selected="selected"' : '';
-				$result .= '<option '.$selected_cat.' value="'.$i.'">'.$x['title'].'</option>';
+				$mtch = $structure[$area][$i]['path'].'.';
+				$mtchlen = mb_strlen($mtch);
+				$mtchlvl = mb_substr_count($mtch,".");
+
+				if(($mtchlvl == 1 && $lvl == 1) || ($lvl > 1 && $mtchlvl == $lvl && in_array($i, $subcats)))
+				{
+					$selected_cat = ($parents[$lvl-1] == $i) ? 'selected="selected"' : '';
+					$result .= '<option '.$selected_cat.' value="'.$i.'">'.$x['title'].'</option>';
+				}
 			}
 		}
 		$result .= '</select>';

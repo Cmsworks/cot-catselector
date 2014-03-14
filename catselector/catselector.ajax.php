@@ -16,8 +16,11 @@ if(!empty($c))
 	$subcats = cot_structure_children($area, $c, false, false);
 	foreach($subcats as $i => $k)
 	{
-		$options[$i]['id'] = $k;
-		$options[$i]['title'] = $structure[$area][$k]['title'];
+		if(cot_auth($area, $k, 'W'))
+		{
+			$options[$i]['id'] = $k;
+			$options[$i]['title'] = $structure[$area][$k]['title'];
+		}
 	}
 	header('Content-Type: application/json');
 	echo json_encode($options);
