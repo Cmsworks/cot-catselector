@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * catselector plugin
+ *
+ * @package catselector
+ * @version 1.0.0
+ * @author CMSWorks Team
+ * @copyright Copyright (c) CMSWorks.ru
+ * @license BSD
+ */
+
+
+function catselector_selectbox($area, $check, $name, $attr = '')
+{
+	global $db, $structure, $usr, $L, $R;
+	
+	if(!empty($check))
+	{
+		$parents = cot_structure_parents($area, $check);
+	}
+
+	$result = "<script type=\"text/javascript\">
+
+function catselector_changeselect(obj)
+{
+	$(obj).next().remove();
+
+	$.ajax
+	({
+		url: \"index.php?r=catselector&area=".$area."&c=\" + $(obj).val(),
+		beforeSend: function() {
+
+		},
+		success: function(data)
+		{
+			var optHtml = '';
+			optHtml = '<option value=\"\">---</option>';
+			for (var i = 0; i < data.length; i++) {
+				optHtml += '<option value=\"' + data[i]['id'] + '\">' + data[i]['title'] + '</option>';
+			}
+			
+			if(optHtml > '')
+			{
+				$(obj).after('<select name=".$name." onChange=\"catselector_changeselect(this);\">' + optHtml + '</select>');
+			}
+		} 
+	});		
+}
+
+</script>";
+	
+	$subcats = cot_structure_children($area, $parents[0], true, true);
+	$maxlvl = 1;
+	foreach ($subcats as $i => $k)
+	{
+		$mtch = $structure[$area][$k]['path'].'.';
+		$mtchlen = mb_strlen($mtch);
+		$mtchlvl = mb_substr_count($mtch,".");
+		if($mtchlvl > $maxlvl) $maxlvl = $mtchlvl;
+	}
+
+	for($lvl = 1; $lvl <= $maxlvl; $lvl++)
+	{
+		$result .= '<select name="'.$name.'" '.$attr.' onChange="catselector_changeselect(this);">';
+		$result .= '<option value="">---</option>';
+		foreach ($structure[$area] as $i => $x)
+		{		
+			$mtch = $structure[$area][$i]['path'].'.';
+			$mtchlen = mb_strlen($mtch);
+			$mtchlvl = mb_substr_count($mtch,".");
+
+			if(($mtchlvl == 1 && $lvl == 1) || ($lvl > 1 && $mtchlvl == $lvl && in_array($i, $subcats)))
+			{
+				$selected_cat = ($parents[$lvl-1] == $i) ? 'selected="selected"' : '';
+				$result .= '<option '.$selected_cat.' value="'.$i.'">'.$x['title'].'</option>';
+			}
+		}
+		$result .= '</select>';
+	}
+	
+	return($result);
+}
