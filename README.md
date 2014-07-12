@@ -1,7 +1,7 @@
 cot-catselector
 ===============
 
-Плагин выбра категории через ajax
+Плагин выбора категории через ajax
 
 Официальная страница плагина: http://cmsworks.ru/catalog/plugins/catselector
 
