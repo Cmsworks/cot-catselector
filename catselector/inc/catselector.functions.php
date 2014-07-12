@@ -11,7 +11,7 @@
  */
 
 
-function catselector_selectbox($area, $check, $name, $attr = '')
+function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = 'W')
 {
 	global $db, $structure, $usr, $L, $R;
 	
@@ -28,7 +28,7 @@ function catselector_changeselect(obj)
 
 	$.ajax
 	({
-		url: \"index.php?r=catselector&area=".$area."&c=\" + $(obj).val(),
+		url: \"index.php?r=catselector&area=".$area."&userrigths=".$userrigths."&c=\" + $(obj).val(),
 		beforeSend: function() {
 
 		},
@@ -66,7 +66,7 @@ function catselector_changeselect(obj)
 		$result .= '<option value="">---</option>';
 		foreach ($structure[$area] as $i => $x)
 		{		
-			if(cot_auth($area, $i, 'W'))
+			if(cot_auth($area, $i, $userrigths))
 			{
 				$mtch = $structure[$area][$i]['path'].'.';
 				$mtchlen = mb_strlen($mtch);
