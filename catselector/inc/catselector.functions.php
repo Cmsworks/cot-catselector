@@ -4,7 +4,7 @@
  * catselector plugin
  *
  * @package catselector
- * @version 1.0.0
+ * @version 1.0.1
  * @author CMSWorks Team
  * @copyright Copyright (c) CMSWorks.ru
  * @license BSD
@@ -19,36 +19,8 @@ function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = '
 	{
 		$parents = cot_structure_parents($area, $check);
 	}
-
-	$result = "<script type=\"text/javascript\">
-
-function catselector_changeselect(obj)
-{
-	$(obj).next().remove();
-
-	$.ajax
-	({
-		url: \"index.php?r=catselector&area=".$area."&userrigths=".$userrigths."&c=\" + $(obj).val(),
-		beforeSend: function() {
-
-		},
-		success: function(data)
-		{
-			var optHtml = '';
-			optHtml = '<option value=\"\">---</option>';
-			for (var i = 0; i < data.length; i++) {
-				optHtml += '<option value=\"' + data[i]['id'] + '\">' + data[i]['title'] + '</option>';
-			}
-			
-			if(optHtml > '')
-			{
-				$(obj).after('<select name=".$name." onChange=\"catselector_changeselect(this);\">' + optHtml + '</select>');
-			}
-		} 
-	});		
-}
-
-</script>";
+	
+	$result = '';
 	
 	$subcats = cot_structure_children($area, $parents[0], true, true);
 	$maxlvl = 1;
@@ -62,8 +34,8 @@ function catselector_changeselect(obj)
 
 	for($lvl = 1; $lvl <= $maxlvl; $lvl++)
 	{
-		$result .= '<select name="'.$name.'" '.$attr.' onChange="catselector_changeselect(this);">';
-		$result .= '<option value="">---</option>';
+		$result .= "<select name=\"".$name."\" ".$attr." onChange=\"catselector_changeselect(this, '".$area."', '".$name."', '".$userrigths."');\">";
+		$result .= "<option value=\"\">---</option>";
 		foreach ($structure[$area] as $i => $x)
 		{		
 			if(cot_auth($area, $i, $userrigths))
@@ -75,11 +47,11 @@ function catselector_changeselect(obj)
 				if(($mtchlvl == 1 && $lvl == 1) || ($lvl > 1 && $mtchlvl == $lvl && in_array($i, $subcats)))
 				{
 					$selected_cat = ($parents[$lvl-1] == $i) ? 'selected="selected"' : '';
-					$result .= '<option '.$selected_cat.' value="'.$i.'">'.$x['title'].'</option>';
+					$result .= "<option ".$selected_cat." value=\"".$i."\">".$x['title']."</option>";
 				}
 			}
 		}
-		$result .= '</select>';
+		$result .= "</select>";
 	}
 	
 	return($result);
