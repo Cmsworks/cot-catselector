@@ -24,14 +24,17 @@ function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = '
 	
 	$subcats = cot_structure_children($area, $parents[0], true, true);
 	$maxlvl = 1;
-	foreach ($subcats as $i => $k)
-	{
-		$mtch = $structure[$area][$k]['path'].'.';
-		$mtchlen = mb_strlen($mtch);
-		$mtchlvl = mb_substr_count($mtch,".");
-		if($mtchlvl > $maxlvl) $maxlvl = $mtchlvl;
+	
+	if(!empty($check)){
+		foreach ($subcats as $i => $k)
+		{
+			$mtch = $structure[$area][$k]['path'].'.';
+			$mtchlen = mb_strlen($mtch);
+			$mtchlvl = mb_substr_count($mtch,".");
+			if($mtchlvl > $maxlvl) $maxlvl = $mtchlvl;
+		}
 	}
-
+	
 	for($lvl = 1; $lvl <= $maxlvl; $lvl++)
 	{
 		$result .= "<select name=\"".$name."\" ".$attr." onChange=\"catselector_changeselect(this, '".$area."', '".$name."', '".$userrigths."');\">";
