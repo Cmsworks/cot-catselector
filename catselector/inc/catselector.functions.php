@@ -11,7 +11,7 @@
  */
 
 
-function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = 'W')
+function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = 'W', $rsc = 1)
 {
 	global $db, $structure, $usr, $L, $R;
 	
@@ -37,7 +37,11 @@ function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = '
 	
 	for($lvl = 1; $lvl <= $maxlvl; $lvl++)
 	{
-		$result .= "<select name=\"".$name."\" ".$attr." onChange=\"catselector_changeselect(this, '".$area."', '".$name."', '".$userrigths."');\">";
+		if(!$rsc){
+			$onchange_select_set_input = "$('input[name=".$name."]').val($(this).val());";
+		}
+		
+		$result .= "<select name=\"".$name."\" ".$attr." onChange=\"".$onchange_select_set_input."catselector_changeselect(this, '".$area."', '".$name."', '".$userrigths."', '".$rsc."');\">";
 		$result .= "<option value=\"\">---</option>";
 		foreach ($structure[$area] as $i => $x)
 		{		
@@ -55,6 +59,10 @@ function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = '
 			}
 		}
 		$result .= "</select>";
+	}
+	
+	if(!$rsc){
+		$result .= "<input type=\"hidden\" name=\"".$name."\" value=\"".$check."\"/>";
 	}
 	
 	return($result);

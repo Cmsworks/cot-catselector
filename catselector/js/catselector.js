@@ -1,4 +1,4 @@
-function catselector_changeselect(obj, area, name, userrigths)
+function catselector_changeselect(obj, area, name, userrigths, rsc)
 {
 	while($(obj).next('select[name="'+name+'"]').length)
 	{
@@ -22,7 +22,11 @@ function catselector_changeselect(obj, area, name, userrigths)
 
 				if(optHtml > '')
 				{
-					$(obj).after('<select name="'+name+'" onChange="catselector_changeselect(this, \''+area+'\', \''+name+'\', \''+userrigths+'\');">' + optHtml + '</select>');
+					if(rsc == '0'){
+						var onchange_select_set_input = "$('input[name="+name+"]').val($(this).val());";
+					}
+					
+					$(obj).after('<select name="'+name+'" onChange="'+onchange_select_set_input+'catselector_changeselect(this, \''+area+'\', \''+name+'\', \''+userrigths+'\', \''+rsc+'\');">' + optHtml + '</select>');
 				}
 			}
 		} 
