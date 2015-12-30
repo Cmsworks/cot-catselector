@@ -15,7 +15,6 @@ function catselector_changeselect(obj, area, name, userrigths, rsc)
 			if(data)
 			{
 				var optHtml = '';
-				optHtml = '<option value="">---</option>';
 				for (var i = 0; i < data.length; i++) {
 					optHtml += '<option value="' + data[i]["id"] + '">' + data[i]["title"] + '</option>';
 				}
@@ -24,6 +23,8 @@ function catselector_changeselect(obj, area, name, userrigths, rsc)
 				{
 					if(rsc == '0'){
 						var onchange_select_set_input = "$('input[name="+name+"]').val($(this).val());";
+					}else{
+						var onchange_select_set_input = '';
 					}
 					
 					$(obj).after('<select name="'+name+'" onChange="'+onchange_select_set_input+'catselector_changeselect(this, \''+area+'\', \''+name+'\', \''+userrigths+'\', \''+rsc+'\');">' + optHtml + '</select>');

@@ -10,6 +10,7 @@
  * @license BSD
  */
 
+require_once cot_langfile('catselector', 'plug');
 
 function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = 'W', $rsc = 1)
 {
@@ -42,7 +43,7 @@ function catselector_selectbox($area, $check, $name, $attr = '', $userrigths = '
 		}
 		
 		$result .= "<select name=\"".$name."\" ".$attr." onChange=\"".$onchange_select_set_input."catselector_changeselect(this, '".$area."', '".$name."', '".$userrigths."', '".$rsc."');\">";
-		$result .= "<option value=\"\">---</option>";
+		$result .= "<option value=\"\">".$L['catselector_select_text']."</option>";
 		foreach ($structure[$area] as $i => $x)
 		{		
 			if(cot_auth($area, $i, $userrigths))
